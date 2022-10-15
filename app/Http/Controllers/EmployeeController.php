@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreEmployeeRequest;
+use App\Models\Company;
 use Illuminate\Http\Request;
+use App\Models\Employee;
 
 class EmployeeController extends Controller
 {
@@ -13,7 +16,8 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        //
+        $employees=Employee::paginate('10');
+        return view('employee.index',compact('employees'));
     }
 
     /**
@@ -23,7 +27,8 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        //
+        $companies=Company::all();
+        return view('employee.create',compact('companies'));
     }
 
     /**
@@ -32,9 +37,11 @@ class EmployeeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreEmployeeRequest $request)
     {
-        //
+        $employee=new Employee($request->all());
+        $employee->save();
+        return redirect()->route('employees.index')->with('success','Employee Creaetd Successfully');
     }
 
     /**
@@ -45,7 +52,8 @@ class EmployeeController extends Controller
      */
     public function show($id)
     {
-        //
+        $employee=Employee::findOrFail($id);
+        return view('employee.show',compact('employee'));
     }
 
     /**
@@ -56,7 +64,9 @@ class EmployeeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $employee=Employee::findOrFail($id);
+        $companies=Company::all();
+        return view('employee.edit',compact('companies','employee'));
     }
 
     /**
@@ -66,9 +76,12 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreEmployeeRequest $request, $id)
     {
-        //
+        $employee=Employee::findOrFail($id);
+        $input=$request->all();
+        $employee->update($input);
+        return redirect()->route('employees.index')->with('success','Employee Updated Successfully');
     }
 
     /**
@@ -79,6 +92,7 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Employee::destroy($id);
+        return redirect()->route('employees.index')->with('success','Employee Deleted Successfully');
     }
 }

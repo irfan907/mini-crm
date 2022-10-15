@@ -39,7 +39,13 @@ class CompanyController extends Controller
      */
     public function store(StoreCompanyRequest $request)
     {
-        $company=Company::create($request->all());
+        $company=new Company($request->all());
+        if($request->hasFile('logo'))
+        {
+            $company->logo='storage/'.$request->file('logo')->store('logos','public');
+        }
+        $company->save();
+
         Mail::to('irfan.rasheed.1107@gmail.com')->send(new NewCompanyCreated($company));
         return redirect()->route('companies.index')->with('success','Company Creaetd Successfully');
     }
@@ -79,7 +85,16 @@ class CompanyController extends Controller
     public function update(StoreCompanyRequest $request, $id)
     {
         $company=Company::findOrFail($id);
-        $company->update($request->all());
+        $input=$request->all();
+        if($request->hasFile('logo'))
+        {
+            if($company->logo!=null && file_exists(public_path($company->logo)))
+            {
+                unlink($company->logo);
+            }
+            $input['logo']='storage/'.$request->file('logo')->store('logos','public');
+        }
+        $company->update($input);
         return redirect()->route('companies.index')->with('success','Company Updated Successfully');
     }
 

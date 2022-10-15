@@ -23,11 +23,12 @@
   <div class="content">
     <div class="container-fluid">
         <div class="card card-body">
-            <table>
+            <table class="table" id="company-table">
                 <thead>
                     <th>ID</th>
                     <th>Name</th>
                     <th>Email</th>
+                    <th>Website</th>
                     <th>Logo</th>
                     <th>Action</th>
                 </thead>
@@ -37,7 +38,12 @@
                         <td>{{ $company->id }}</td>
                         <td>{{ $company->name }}</td>
                         <td>{{ $company->email }}</td>
-                        <td>{{ $company->logo }}</td>
+                        <td>{{ $company->website }}</td>
+                        <td>
+                          @if(isset($company->logo) && !empty($company->logo) && file_exists(public_path($company->logo)))
+                          <img src="{{ asset($company->logo) }}" class=" " width="30" height="30" alt=" " />
+                          @endif
+                        </td>
                         <td>
                             <div class="row">
                                 <a href="{{ route('companies.show',$company->id) }}" class="btn btn-sm btn-info mr-1">Show</a>
@@ -53,7 +59,7 @@
                     @endforeach
                 </tbody>
             </table>
-            <div>
+            <div class="mt-3">
                 {{ $companies->links() }}
             </div>
         </div>
@@ -62,3 +68,18 @@
   </div>
   <!-- /.content -->
 @endsection
+@push('styles')
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+@endpush
+@push('scripts')  
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+
+<script>
+  $(document).ready( function () {
+    $('#company-table').DataTable({
+      paging:false
+      
+    });
+  });
+</script>
+@endpush

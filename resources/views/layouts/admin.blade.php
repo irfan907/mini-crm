@@ -15,6 +15,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="{{ asset('admin-lte-3/plugins/fontawesome-free/css/all.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href=" {{ asset('admin-lte-3/dist/css/adminlte.min.css') }}">
+  @stack('styles')
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -195,7 +196,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="{{ route('home') }}" class="nav-link">
+            <a href="{{ route('home') }}" class="nav-link {{ Route::currentRouteName() == 'home' ? 'active':'' }}">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Dashboard    
@@ -203,7 +204,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ route('companies.index') }}" class="nav-link">
+            <a href="{{ route('companies.index') }}" class="nav-link {{ str_contains(Route::currentRouteName(),'companies') ? 'active':'' }}">
               <i class="nav-icon fas fa-home"></i>
               <p>
                 Companies   
@@ -211,7 +212,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ route('employees.index') }}" class="nav-link">
+            <a href="{{ route('employees.index') }}" class="nav-link {{ str_contains(Route::currentRouteName(),'employees') ? 'active':'' }}">
               <i class="nav-icon fas fa-users"></i>
               <p>
                 Employees
@@ -273,5 +274,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{ asset('admin-lte-3/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('admin-lte-3/dist/js/adminlte.min.js') }}"></script>
+@stack('scripts')
 </body>
 </html>

@@ -32,8 +32,15 @@
                 </div>
 
                 <div class="form-group col-md-12">
+                  <label>Website</label>
+                  <input type="text" name="website" value="{{ $company->website }}" class="form-control " readonly>
+              </div>
+
+                <div class="form-group col-md-12">
                     <label>Logo</label>
-                    <input type="text" name="logo" value="{{ $company->logo }}" class="form-control " readonly>
+                        @if(isset($company->logo) && !empty($company->logo) && file_exists(public_path($company->logo)))
+                          <img src="{{ asset($company->logo) }}" class=" " width="100" height="100" alt=" " />
+                          @endif
                 </div>
 
                 <div class="form-group col-md-12">
